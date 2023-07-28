@@ -1,0 +1,3 @@
+,model_name,trips without prediction,trips without prediction,trips without prediction,accuracy overall,accuracy overall,accuracy overall,accuracy of trips w predictions,accuracy of trips w predictions,accuracy of trips w predictions,f1 weighted,f1 weighted,f1 weighted
+,,purpose,mode,replaced,purpose,mode,replaced,purpose,mode,replaced,purpose,mode,replaced
+0,random forests (coordinates),0,0,0,0.7045585689555683,0.7969107551487414,0.8021955682049197,0.7045585689555683,0.7969107551487414,0.8021955682049197,0.69581381490815,0.7896796943747781,0.7997021971273262
