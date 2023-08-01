@@ -1,1 +1,17 @@
-The main notebook for evaluating downstream metrices is downstream_matrices_evaluation/calculate_matrices.ipynb
+The main notebook for evaluating downstream metrices is downstream_matrices_evaluations/downstream_matrices_evaluation/calculate_matrices.ipynb
+
+Please download all the files in the downstream_matrices_evaluations/downstream_matrices_evaluation, including the three empty files first_trial_results, CSVs and pngs. We need these three files to store the model results, CSV files and plots separately.
+
+Under downstream_matrices_evaluations, there are two other files, TRB_label_assist and Error_bars.
+TRB_label_assist contains the model for mode prediction.
+Error_bars contains the methodology for calculating energy consumption. 
+
+Changes
+1. TRB_label_assist
+(1) performance_eval.py
+(2) models.py
+(3) classification_performance.ipynb (You can ignore all the changes in this jupyter notebook. I initially worked directly on this jupyter notebook, but I have moved all my work to calculate_matrices.ipynb and added a lot of new work there.)
+
+2. Error_bars
+(1) get_EC.py
+(2) confusion_matrix_handling.py
