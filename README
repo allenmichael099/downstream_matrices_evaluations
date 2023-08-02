@@ -6,6 +6,7 @@ Under downstream_matrices_evaluations, there are two other files, TRB_label_assi
 TRB_label_assist contains the model for mode prediction.
 Error_bars contains the methodology for calculating energy consumption. 
 
+
 Changes
 1. TRB_label_assist
 (1) performance_eval.py
@@ -15,3 +16,11 @@ Changes
 2. Error_bars
 (1) get_EC.py
 (2) confusion_matrix_handling.py
+
+
+Initial code came from:
+1. TRB_label_assist:
+https://github.com/e-mission/e-mission-eval-private-data
+
+2. Error_bars: 
+https://github.com/allenmichael099/e-mission-eval-private-data/tree/error_bars/Error_bars
