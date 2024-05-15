@@ -393,7 +393,9 @@ def k_fold_cross_val_predict(model,
                       user_df=None,
                       k=1,
                       random_state=42,
-                      min_samples=False):
+                      min_samples=False,
+                      labeled_unlabeled_proportions = [0.2,0.8],
+                      stratify = True):
     """ Stratified seperate dataset to temp dataset(80% of the whole dataset) and validation dataset((20% of the whole dataset) based on the true trip mode
         Conducts 4-fold cross-validation(Stratified) based on temp dataset, and get the prediction of temp dataset.
         Use temp dataset to train the model and predict the validation dataset
@@ -412,7 +414,11 @@ def k_fold_cross_val_predict(model,
             min_samples (bool): whether or not to require a minimum number of 
                 trips. If True, the value is determined by gu.valid_user(). If False, we still require a minimum of k trips in order for k-fold cross-validation to work. 
     """
-    kfolds = StratifiedKFold(n_splits=k, random_state=random_state, shuffle=True)
+    
+    if stratify== True:
+        kfolds = StratifiedKFold(n_splits=k, random_state=random_state, shuffle=True)
+    else:
+        kfolds = KFold(k, random_state=random_state, shuffle=True)
 
     idx = []
     # trip_idx = []
@@ -455,17 +461,28 @@ def k_fold_cross_val_predict(model,
     modified_df = user_df[~user_df['mode_true'].isin(single_count)]
 
     # Split the modified dataset into train and temp sets (80% train + temp, 20% validation)
-    temp_df, validation_data = train_test_split(modified_df, test_size=0.2, random_state=49, stratify = modified_df.mode_true)
+    # Changed by Michael: random_state = 49 -> random_state = random_state. test_size: 0.4
+    if stratify== True:
+        temp_df, validation_data = train_test_split(modified_df, test_size=labeled_unlabeled_proportions[1], 
+                                            random_state= random_state, 
+                                            stratify = modified_df.mode_true)
+    else:
+        print('no strat')
+        temp_df, validation_data = train_test_split(modified_df, test_size=labeled_unlabeled_proportions[1], 
+                                    random_state= random_state)
+
+    #print(validation_data.mode_true.value_counts())
+    #print(temp_df.mode_true.value_counts())
 
     # Randomly assign the rows from single_count_df to temp_df or validation_data with p=[0.8, 0.2]
     for _, row in single_count_df.iterrows():
-        random_set = np.random.choice(["temp", "validation"], p=[0.8, 0.2])
+        random_set = np.random.choice(["temp", "validation"], p=labeled_unlabeled_proportions) ####### was 0.8, 0.2
         if random_set == "temp":
             temp_df = temp_df.append(row)
         else:
             validation_data = validation_data.append(row)
 
-    # Further split the temp set into train and test sets (60% train, 20% test)
+    # Further split the temp set into train and test sets (k=5 splits means 80% train, 20% test)
     for _, (train_idx, test_idx) in enumerate(kfolds.split(temp_df, temp_df['mode_true'])):
         train_trips = temp_df.iloc[train_idx]
         test_trips = temp_df.iloc[test_idx]
